@@ -1,6 +1,12 @@
 let page = document.getElementById("buttonDiv");
 let selectedClassName = "current";
-const presetButtonColors = ["#3aa757", "#e8453c", "#f9bb2d", "#4688f1"];
+const presetButtonColors = [
+  "#3aa757",
+  "#e8453c",
+  "#f9bb2d",
+  "#4688f1",
+  "#222222",
+];
 
 // Reacts to a button click by marking marking the selected button and saving
 // the selection
@@ -23,6 +29,8 @@ function handleButtonClick(event) {
 function constructOptions(buttonColors) {
   chrome.storage.sync.get("color", (data) => {
     let currentColor = data.color;
+
+    console.log("Set default color", currentColor);
 
     // For each color we were provided…
     for (let buttonColor of buttonColors) {
