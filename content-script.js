@@ -3,7 +3,7 @@ let button = document.createElement("button");
 button.innerText = "Grab";
 button.style.position = "fixed";
 button.style.right = "0";
-button.style.top = "280px";
+button.style.top = "0";
 button.style.zIndex = 9999;
 
 // …and register a listener for when that button is clicked

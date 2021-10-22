@@ -33,7 +33,7 @@
         "https://us.shein.com/*"
       ],
       "css": [
-        "button.css"
+        "styles.css"
       ],
       "js": [
         "content-script.js"

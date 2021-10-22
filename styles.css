@@ -7,7 +7,7 @@ button {
   color: white;
   cursor: pointer;
   border-radius: 22px;
-  background-color: #222;
+  background-color: #d0021b;
 }
 
 button.current {
