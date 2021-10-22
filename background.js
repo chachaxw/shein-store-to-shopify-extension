@@ -1,6 +1,10 @@
-let color = "#222222";
-
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ color });
-  console.log("Default background color set to %cblack", `color: ${color}`);
+  console.log("Extension installed");
+});
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["content-script.js"],
+  });
 });
