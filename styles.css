@@ -1,12 +1,12 @@
 button {
-  height: 44px;
-  width: 44px;
+  height: 40px;
+  width: 40px;
   outline: none;
   margin: 10px;
   border: none;
   color: white;
   cursor: pointer;
-  border-radius: 22px;
+  border-radius: 20px;
   background-color: #d0021b;
 }
 
