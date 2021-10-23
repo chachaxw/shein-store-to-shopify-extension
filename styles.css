@@ -13,3 +13,92 @@ button {
 button.current {
   box-shadow: 0 0 0 2px white, 0 0 0 4px black;
 }
+
+.grab-button {
+  height: 40px;
+  width: 40px;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: #d0021b;
+  position: fixed;
+  top: 4px;
+  right: 4px;
+  z-index: 9999;
+}
+
+.cancel-button {
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+}
+
+.shopify-container {
+  width: 250px;
+  position: fixed;
+  padding: 16px;
+  top: 0;
+  right: -250px;
+  bottom: 0;
+  color: white;
+  z-index: 99999;
+  background-color: #222;
+}
+
+.product-title {
+  font-size: 16px;
+  margin-top: 32px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.product-img {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.product-img img {
+  width: 98px;
+  height: auto;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.product-price {
+  font-size: 14px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.product-size {
+  font-size: 14px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.save-button {
+  height: 44px;
+  width: 250px;
+  margin-top: 32px;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 22px;
+  background-color: #2e54ff;
+}
+
+.save-button:hover {
+  background-color: #0024c7;
+}
