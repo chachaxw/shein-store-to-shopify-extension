@@ -1,3 +1,10 @@
+// Shopify api url example like this:
+// https://{apiKey}:{password}@chachaxw.myshopify.com/admin/api/2021-10/products.json
+const shopifyConfig = {
+  apiKey: "22a18f405e229470e8663e113053f40f",
+  password: "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",
+};
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("request", request);
   console.log("sender", sender);
@@ -52,6 +59,7 @@ function getPageProductInfo() {
     });
   const formatImgList = Array.from(new Set(productImgList));
 
+  // Get the product color list from current page
   const productColorNodeList = productInfoWrapper.querySelectorAll(
     ".product-intro__color-choose .product-intro__color-radio img"
   );
@@ -61,25 +69,24 @@ function getPageProductInfo() {
       return item.src;
     });
 
-  const saveButton = document.querySelector(".save-button");
+  // Get the product description html from current page
+  const productInfoDesc = productInfoWrapper.querySelector(
+    ".product-intro__description .product-intro__description-table"
+  ).innerHTML;
+
   const productWrapper = document.querySelector(".product-wrapper");
   const productInfo = {
     title: productInfoTitle,
     images: formatImgList,
     sku: productInfoSku,
     price: productInfoPrice,
+    bodyHtml: productInfoDesc,
     sizeList: productInfoSizeList,
     colorList: productInfoColorList,
   };
 
-  console.log(productInfo);
-
   if (!productWrapper) {
     initProductInfo(productInfo);
-  }
-
-  if (!saveButton) {
-    initSaveButton();
   }
 
   showContainer();
@@ -109,6 +116,7 @@ function showContainer() {
 function closeContainer() {
   const container = document.querySelector(".shopify-container");
   const productWrapper = document.querySelector(".product-wrapper");
+
   container.style.right = "-250px";
   container.removeChild(productWrapper);
 }
@@ -129,6 +137,7 @@ function initProductInfo(productInfo) {
   initProductInfoPrice(price);
   initProductInfoSize(sizeList);
   initProductInfoColor(colorList);
+  initSaveButton(productInfo);
 }
 
 function initProductInfoTitle(productInfoTitle) {
@@ -217,17 +226,89 @@ function initProductInfoColor(productInfoColorList) {
 }
 
 // Build save button
-function initSaveButton() {
+function initSaveButton(productInfo) {
   const container = document.querySelector(".product-wrapper");
   const saveButton = document.createElement("button");
 
   saveButton.innerText = "Save to Shopify";
   saveButton.classList.add("save-button");
-  saveButton.addEventListener("click", saveProduct);
-
+  saveButton.addEventListener("click", () => saveProduct(productInfo));
   container.appendChild(saveButton);
 }
 
-function saveProduct() {
-  console.log("保存");
+async function saveProduct(productInfo) {
+  const saveButton = document.querySelector(".save-button");
+
+  // Add loading state to saveButton;
+  saveButton.innerText = "Saving...";
+  saveButton.disabled = true;
+
+  const headers = new Headers();
+  const { apiKey, password } = shopifyConfig;
+  const { title, images, sizeList, bodyHtml, colorList } = productInfo;
+  const data = {
+    product: {
+      title,
+      images,
+      vendor: "Shein",
+      body_html: bodyHtml,
+      product_type: "Drawstring Waist",
+      variants: generateVariants(productInfo),
+      options: [
+        { name: "Size", values: sizeList },
+        { name: "Color", values: colorList },
+      ],
+    },
+  };
+  console.log("提交数据", data);
+
+  headers.append("Authorization", "Basic " + btoa(`${apiKey}:${password}`));
+  headers.append("Content-Type", "application/json");
+
+  const response = await fetch(
+    `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
+    {
+      headers,
+      method: "POST",
+      mode: "no-cors",
+      credentials: "include",
+      body: JSON.stringify(data),
+    }
+  );
+  console.log("返回数据", response);
+  saveButton.innerText = "Saved";
+}
+
+function generateVariants(productInfo) {
+  let variants = [];
+  const { title, sku, price, sizeList, colorList } = productInfo;
+
+  if (sizeList.length) {
+    sizeList.forEach((e) => {
+      let variant = {
+        title,
+        sku: getSku(sku),
+        price: getPrice(price),
+        option1: e,
+      };
+
+      if (colorList.length) {
+        colorList.forEach((d) => {
+          variant = { ...variant, option2: e };
+        });
+      }
+
+      variants.push(variant);
+    });
+  }
+
+  return variants;
+}
+
+function getPrice(price) {
+  return price.split("$")[1];
+}
+
+function getSku(sku) {
+  return sku.split(":")[1].trim();
 }
