@@ -22,7 +22,7 @@ button.current {
   color: white;
   cursor: pointer;
   border-radius: 20px;
-  background-color: #d0021b;
+  background-color: #2e54ff;
   position: fixed;
   top: 4px;
   right: 4px;
@@ -30,14 +30,20 @@ button.current {
 }
 
 .cancel-button {
+  width: 56px;
+  height: 24px;
   outline: none;
-  border: none;
+  border: 1px solid #2e54ff;
   color: white;
   cursor: pointer;
   position: absolute;
   top: 12px;
   right: 12px;
-  background: none;
+  background-color: rgb(46, 84, 255, 0.8);
+}
+
+.cancel-button:hover {
+  background-color: rgb(46, 84, 255, 0.5);
 }
 
 .shopify-container {
@@ -47,9 +53,17 @@ button.current {
   top: 0;
   right: -250px;
   bottom: 0;
-  color: white;
+  font-size: 12px;
+  color: #222;
   z-index: 99999;
-  background-color: #222;
+  background-color: #fff;
+  box-shadow: -2px 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.product-wrapper {
+  height: calc(100vh-48px);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .product-title {
@@ -62,11 +76,12 @@ button.current {
 .product-img {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 8px;
   justify-content: space-between;
 }
 
 .product-img img {
-  width: 98px;
+  width: 105px;
   height: auto;
   margin-bottom: 8px;
   object-fit: cover;
@@ -79,17 +94,32 @@ button.current {
   font-weight: bold;
 }
 
-.product-size {
-  font-size: 14px;
-  margin-top: 24px;
+.product-size,
+.product-color {
   margin-bottom: 8px;
-  font-weight: bold;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.product-size span:not(:first-child) {
+  padding: 0 4px;
+}
+
+.product-color img {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+  overflow: hidden;
 }
 
 .save-button {
+  position: absolute;
+  bottom: 16px;
   height: 44px;
-  width: 250px;
-  margin-top: 32px;
+  width: 218px;
   outline: none;
   border: none;
   color: white;
@@ -99,6 +129,7 @@ button.current {
   background-color: #2e54ff;
 }
 
+.grab-button:hover,
 .save-button:hover {
   background-color: #0024c7;
 }

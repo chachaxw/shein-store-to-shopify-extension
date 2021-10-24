@@ -55,25 +55,34 @@ function getPageProductInfo() {
   const productColorNodeList = productInfoWrapper.querySelectorAll(
     ".product-intro__color-choose .product-intro__color-radio img"
   );
-  const productColorList = Array.prototype.slice
+  const productInfoColorList = Array.prototype.slice
     .call(productColorNodeList)
     .map((item) => {
       return item.src;
     });
 
-  console.log(
-    formatImgList,
-    productInfoTitle,
-    productInfoSku,
-    productInfoPrice,
-    productInfoSizeList,
-    productColorList
-  );
+  const saveButton = document.querySelector(".save-button");
+  const productWrapper = document.querySelector(".product-wrapper");
+  const productInfo = {
+    title: productInfoTitle,
+    images: formatImgList,
+    sku: productInfoSku,
+    price: productInfoPrice,
+    sizeList: productInfoSizeList,
+    colorList: productInfoColorList,
+  };
+
+  console.log(productInfo);
+
+  if (!productWrapper) {
+    initProductInfo(productInfo);
+  }
+
+  if (!saveButton) {
+    initSaveButton();
+  }
 
   showContainer();
-  initProductInfoTitle(productInfoTitle);
-  initProductImg(formatImgList);
-  initSaveButton();
 }
 
 // Build container view
@@ -81,7 +90,7 @@ function initContainerView() {
   const container = document.createElement("div");
   const cancelButton = document.createElement("button");
 
-  cancelButton.innerText = "Close";
+  cancelButton.innerText = "Cancel";
   cancelButton.classList.add("cancel-button");
   cancelButton.addEventListener("click", closeContainer);
 
@@ -90,20 +99,40 @@ function initContainerView() {
   document.body.appendChild(container);
 }
 
-// make container visible
+// Make container visible
 function showContainer() {
   const container = document.querySelector(".shopify-container");
   container.style.right = "0";
 }
 
-// make container hidden
+// Make container hidden
 function closeContainer() {
   const container = document.querySelector(".shopify-container");
+  const productWrapper = document.querySelector(".product-wrapper");
   container.style.right = "-250px";
+  container.removeChild(productWrapper);
+}
+
+// Build Product info view
+function initProductInfo(productInfo) {
+  const container = document.querySelector(".shopify-container");
+  const productWrapper = document.createElement("div");
+  const { title, images, sku, price, sizeList, colorList } = productInfo;
+
+  // Append product wrapper to shopify container
+  productWrapper.classList.add("product-wrapper");
+  container.appendChild(productWrapper);
+
+  initProductInfoTitle(title);
+  initProductInfoImg(images);
+  initProductInfoSku(sku);
+  initProductInfoPrice(price);
+  initProductInfoSize(sizeList);
+  initProductInfoColor(colorList);
 }
 
 function initProductInfoTitle(productInfoTitle) {
-  const container = document.querySelector(".shopify-container");
+  const container = document.querySelector(".product-wrapper");
   const title = document.createElement("div");
 
   title.innerText = productInfoTitle;
@@ -111,8 +140,26 @@ function initProductInfoTitle(productInfoTitle) {
   container.appendChild(title);
 }
 
-function initProductImg(productImgList) {
-  const container = document.querySelector(".shopify-container");
+function initProductInfoSku(productInfoSku) {
+  const container = document.querySelector(".product-wrapper");
+  const text = document.createElement("div");
+
+  text.innerText = productInfoSku;
+  text.style.marginBottom = "8px";
+  container.appendChild(text);
+}
+
+function initProductInfoPrice(productInfoPrice) {
+  const container = document.querySelector(".product-wrapper");
+  const text = document.createElement("div");
+
+  text.innerText = `Price: ${productInfoPrice}`;
+  text.style.marginBottom = "8px";
+  container.appendChild(text);
+}
+
+function initProductInfoImg(productImgList) {
+  const container = document.querySelector(".product-wrapper");
   const imgContainer = document.createElement("div");
 
   productImgList.map((item) => {
@@ -125,19 +172,56 @@ function initProductImg(productImgList) {
   container.appendChild(imgContainer);
 }
 
-function initProductInfoSize(productInfoSize) {
-  const container = document.querySelector(".shopify-container");
-  const size = document.createElement("div");
+function initProductInfoSize(productInfoSizeList) {
+  const container = document.querySelector(".product-wrapper");
+  const sizeContainer = document.createElement("div");
+  const label = document.createElement("span");
 
-  size.classList.add("product-size");
-  container.appendChild(title);
+  label.innerText = "Size:";
+  sizeContainer.appendChild(label);
+
+  if (productInfoSizeList.length) {
+    productInfoSizeList.map((item) => {
+      const span = document.createElement("span");
+      span.innerText = item;
+      sizeContainer.appendChild(span);
+    });
+  } else {
+    label.innerText = "Size: -";
+  }
+
+  sizeContainer.classList.add("product-size");
+  container.appendChild(sizeContainer);
 }
 
-// Build container view
+function initProductInfoColor(productInfoColorList) {
+  const container = document.querySelector(".product-wrapper");
+  const colorContainer = document.createElement("div");
+  const label = document.createElement("span");
+
+  label.innerText = "Color:";
+  colorContainer.appendChild(label);
+
+  if (productInfoColorList.length) {
+    productInfoColorList.map((item) => {
+      const img = document.createElement("img");
+      img.src = item;
+      colorContainer.appendChild(img);
+    });
+  } else {
+    label.innerText = "Color: -";
+  }
+
+  colorContainer.classList.add("product-color");
+  container.appendChild(colorContainer);
+}
+
+// Build save button
 function initSaveButton() {
+  const container = document.querySelector(".product-wrapper");
   const saveButton = document.createElement("button");
 
-  saveButton.innerText = "Save";
+  saveButton.innerText = "Save to Shopify";
   saveButton.classList.add("save-button");
   saveButton.addEventListener("click", saveProduct);
 
