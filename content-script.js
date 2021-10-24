@@ -250,9 +250,7 @@ async function saveProduct(productInfo) {
     product: {
       title,
       images,
-      vendor: "Shein",
       body_html: bodyHtml,
-      product_type: "Drawstring Waist",
       variants: generateVariants(productInfo),
       options: [
         { name: "Size", values: sizeList },
@@ -271,7 +269,7 @@ async function saveProduct(productInfo) {
         headers,
         method: "POST",
         mode: "no-cors",
-        redirect: "follow",
+        referer: "no-referrer",
         credentials: "include",
         body: JSON.stringify(data),
       }
