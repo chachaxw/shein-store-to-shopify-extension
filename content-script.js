@@ -2,7 +2,7 @@
 // https://{apiKey}:{password}@chachaxw.myshopify.com/admin/api/2021-10/products.json
 const shopifyConfig = {
   apiKey: "22a18f405e229470e8663e113053f40f",
-  password: "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",
+  sharedSecret: "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",
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -45,7 +45,7 @@ function getPageProductInfo() {
   const productInfoSizeList = Array.prototype.slice
     .call(sizeNodeList)
     .map((item) => {
-      return item.querySelector(".product-intro__size-radio-inner").innerText;
+      return item.querySelector("span").firstChild.innerText;
     });
 
   // Get the product img list from current page
@@ -61,12 +61,12 @@ function getPageProductInfo() {
 
   // Get the product color list from current page
   const productColorNodeList = productInfoWrapper.querySelectorAll(
-    ".product-intro__color-choose .product-intro__color-radio img"
+    ".product-intro__color-select .product-intro__color-item span"
   );
   const productInfoColorList = Array.prototype.slice
     .call(productColorNodeList)
     .map((item) => {
-      return item.src;
+      return item.innerText;
     });
 
   // Get the product description html from current page
@@ -213,9 +213,9 @@ function initProductInfoColor(productInfoColorList) {
 
   if (productInfoColorList.length) {
     productInfoColorList.map((item) => {
-      const img = document.createElement("img");
-      img.src = item;
-      colorContainer.appendChild(img);
+      const span = document.createElement("span");
+      span.innerText = item;
+      colorContainer.appendChild(span);
     });
   } else {
     label.innerText = "Color: -";
@@ -244,7 +244,7 @@ async function saveProduct(productInfo) {
   saveButton.disabled = true;
 
   const headers = new Headers();
-  const { apiKey, password } = shopifyConfig;
+  const { apiKey, sharedSecret } = shopifyConfig;
   const { title, images, sizeList, bodyHtml, colorList } = productInfo;
   const data = {
     product: {
@@ -260,23 +260,29 @@ async function saveProduct(productInfo) {
       ],
     },
   };
-  console.log("提交数据", data);
 
-  headers.append("Authorization", "Basic " + btoa(`${apiKey}:${password}`));
+  headers.append("Authorization", "Basic " + btoa(`${apiKey}:${sharedSecret}`));
   headers.append("Content-Type", "application/json");
 
-  const response = await fetch(
-    `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
-    {
-      headers,
-      method: "POST",
-      mode: "no-cors",
-      credentials: "include",
-      body: JSON.stringify(data),
-    }
-  );
-  console.log("返回数据", response);
-  saveButton.innerText = "Saved";
+  try {
+    const response = await fetch(
+      `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
+      {
+        headers,
+        method: "POST",
+        mode: "no-cors",
+        redirect: "follow",
+        credentials: "include",
+        body: JSON.stringify(data),
+      }
+    );
+    console.log("Reponse", response);
+    saveButton.innerText = "Saved";
+  } catch (error) {
+    console.log("Request Error", error);
+    saveButton.disabled = false;
+    saveButton.innerText = "Error, Try Again!";
+  }
 }
 
 function generateVariants(productInfo) {
@@ -294,7 +300,7 @@ function generateVariants(productInfo) {
 
       if (colorList.length) {
         colorList.forEach((d) => {
-          variant = { ...variant, option2: e };
+          variant = { ...variant, option2: d };
         });
       }
 

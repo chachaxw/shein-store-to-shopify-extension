@@ -103,7 +103,8 @@ button.current {
   align-items: center;
 }
 
-.product-size span:not(:first-child) {
+.product-size span:not(:first-child),
+.product-color span:not(:first-child) {
   padding: 0 4px;
 }
 
