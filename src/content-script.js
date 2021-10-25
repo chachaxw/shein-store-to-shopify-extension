@@ -1,3 +1,11 @@
+// Shopify api url example like this:
+// https://{apiKey}:{password}@chachaxw.myshopify.com/admin/api/2021-10/products.json
+const shopifyConfig = {
+  apiKey: "22a18f405e229470e8663e113053f40f",
+  password: "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",
+  sharedSecret: "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",
+};
+
 initGrabButton();
 initContainerView();
 
@@ -67,7 +75,7 @@ function getPageProductInfo() {
     images: formatImgList,
     sku: productInfoSku,
     price: productInfoPrice,
-    bodyHtml: productInfoDesc,
+    bodyHtml: productInfoTitle,
     sizeList: productInfoSizeList,
     colorList: productInfoColorList,
   };
@@ -232,29 +240,40 @@ async function saveProduct(productInfo) {
 
   const { title, images, sizeList, bodyHtml, colorList } = productInfo;
   const data = {
-    product: {
-      title,
-      images,
-      body_html: bodyHtml,
-      variants: generateVariants(productInfo),
-      options: [
-        { name: "Size", values: sizeList },
-        { name: "Color", values: colorList },
-      ],
-    },
+    title,
+    images,
+    body_html: bodyHtml,
+    variants: generateVariants(productInfo),
+    options: [
+      { name: "Size", values: sizeList },
+      { name: "Color", values: colorList },
+    ],
   };
 
-  chrome.runtime.sendMessage(data, function (response) {
-    console.log("====================================");
-    console.log(response);
-    console.log("====================================");
-    if (response?.ok) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/shopify/products/create`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        mode: "no-cors",
+        credentials: "include",
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (response.status === 200) {
       saveButton.innerText = "Saved";
     } else {
-      saveButton.disabled = false;
       saveButton.innerText = "Try Again!";
+      saveButton.disabled = false;
     }
-  });
+  } catch (error) {
+    saveButton.innerText = "Try Again!";
+    saveButton.disabled = false;
+  }
 }
 
 function generateVariants(productInfo) {

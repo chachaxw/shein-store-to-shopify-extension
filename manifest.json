@@ -4,7 +4,7 @@
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "permissions": [
     "storage",
@@ -12,7 +12,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://chachaxw.myshopify.com/"
+    "https://chachaxw.myshopify.com/admin/"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -29,17 +29,17 @@
     "48": "/images/get_started48.png",
     "128": "/images/get_started128.png"
   },
-  "options_page": "options.html",
+  "options_page": "src/options.html",
   "content_scripts": [
     {
       "matches": [
         "https://us.shein.com/*"
       ],
       "css": [
-        "styles.css"
+        "src/styles.css"
       ],
       "js": [
-        "content-script.js"
+        "src/content-script.js"
       ]
     }
   ]

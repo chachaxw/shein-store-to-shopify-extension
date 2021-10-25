@@ -30,35 +30,32 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
-  try {
-    const { password } = shopifyConfig;
-    const headers = new Headers();
+// chrome.runtime.onMessage.addListener(async function (
+//   request,
+//   sender,
+//   sendResponse
+// ) {
+//   try {
+//     const { password } = shopifyConfig;
+//     const headers = new Headers();
 
-    headers.append("X-Shopify-Access-Token", password);
-    headers.append("Content-Type", "application/json");
+//     headers.append("X-Shopify-Access-Token", password);
+//     headers.append("Content-Type", "application/json");
 
-    const response = await fetch(
-      `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
-      {
-        headers,
-        method: "POST",
-        mode: "no-cors",
-        credentials: "same-origin",
-        body: JSON.stringify(request),
-      }
-    );
-    console.log("====================================");
-    console.log(response);
-    console.log("====================================");
-    sendResponse(response);
-  } catch (error) {
-    sendResponse(error);
-  }
+//     const response = await fetch(
+//       `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
+//       {
+//         headers,
+//         method: "POST",
+//         mode: "no-cors",
+//         credentials: "same-origin",
+//         body: JSON.stringify(request),
+//       }
+//     );
+//     sendResponse(response);
+//   } catch (error) {
+//     sendResponse(error);
+//   }
 
-  return true;
-});
+//   return true;
+// });
