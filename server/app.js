@@ -1,7 +1,7 @@
 const Koa = require("koa");
 const Router = require("koa-router");
 const Shopify = require("shopify-api-node");
-const bodyParser = require("koa-bodyparser");
+const koaBody = require("koa-body");
 
 const app = new Koa();
 const router = new Router();
@@ -25,21 +25,17 @@ router.post("/shopify/products/create", async (ctx, next) => {
       shopName,
       password,
     });
+    const response = await shopify.product.create(JSON.parse(body));
 
-    const response = await shopify.product.create(body);
-
-    console.log("Response", response);
     ctx.status = 200;
     ctx.body = response;
   } catch (err) {
     ctx.status = err.response.statusCode || 503;
-    ctx.body = err.response.body;
+    ctx.body = err.response.body || "Server Internal Error";
   }
-
-  next();
 });
 
-app.use(bodyParser());
+app.use(koaBody());
 
 app.use(router.routes()).use(router.allowedMethods());
 

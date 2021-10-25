@@ -254,9 +254,6 @@ async function saveProduct(productInfo) {
     const response = await fetch(
       `http://localhost:3000/shopify/products/create`,
       {
-        headers: {
-          "Content-Type": "application/json",
-        },
         method: "POST",
         mode: "no-cors",
         credentials: "include",
@@ -264,7 +261,7 @@ async function saveProduct(productInfo) {
       }
     );
 
-    if (response.status === 200) {
+    if (response.type === "opaque" || response.ok) {
       saveButton.innerText = "Saved";
     } else {
       saveButton.innerText = "Try Again!";

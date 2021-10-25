@@ -8,7 +8,7 @@
   "dependencies": {
     "@shopify/shopify-api": "^1.4.3",
     "koa": "^2.13.4",
-    "koa-bodyparser": "^4.3.0",
+    "koa-body": "^4.2.0",
     "koa-router": "^10.1.1",
     "shopify-api-node": "^3.8.0"
   }
