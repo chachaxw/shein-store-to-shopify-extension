@@ -240,7 +240,11 @@ async function saveProduct(productInfo) {
 
   const { title, images, sizeList, bodyHtml, colorList } = productInfo;
 
-  let options = [{ name: "Size", values: sizeList }];
+  let options = [];
+
+  if (sizeList.length) {
+    options.push({ name: "Size", values: sizeList });
+  }
 
   if (colorList.length) {
     options.push({ name: "Color", values: colorList });
