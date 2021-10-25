@@ -6,6 +6,7 @@
     "start": "node server/app.js"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@shopify/shopify-api": "^1.4.3",
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",

@@ -255,8 +255,7 @@ async function saveProduct(productInfo) {
       `http://localhost:3000/shopify/products/create`,
       {
         method: "POST",
-        mode: "no-cors",
-        credentials: "include",
+        mode: "cors",
         body: JSON.stringify(data),
       }
     );

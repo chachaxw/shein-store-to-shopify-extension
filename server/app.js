@@ -1,6 +1,7 @@
 const Koa = require("koa");
 const Router = require("koa-router");
 const Shopify = require("shopify-api-node");
+const cors = require("@koa/cors");
 const koaBody = require("koa-body");
 
 const app = new Koa();
@@ -34,6 +35,8 @@ router.post("/shopify/products/create", async (ctx, next) => {
     ctx.body = err.response.body || "Server Internal Error";
   }
 });
+
+app.use(cors());
 
 app.use(koaBody());
 
