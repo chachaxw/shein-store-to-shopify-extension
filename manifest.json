@@ -11,6 +11,9 @@
     "activeTab",
     "scripting"
   ],
+  "host_permissions": [
+    "https://chachaxw.myshopify.com/"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

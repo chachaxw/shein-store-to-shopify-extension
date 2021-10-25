@@ -1,16 +1,3 @@
-// Shopify api url example like this:
-// https://{apiKey}:{password}@chachaxw.myshopify.com/admin/api/2021-10/products.json
-const shopifyConfig = {
-  apiKey: "22a18f405e229470e8663e113053f40f",
-  sharedSecret: "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",
-};
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("request", request);
-  console.log("sender", sender);
-  console.log("sendResponse", sendResponse);
-});
-
 initGrabButton();
 initContainerView();
 
@@ -25,7 +12,7 @@ function initGrabButton() {
   document.querySelector("body").appendChild(grabButton);
 }
 
-// The body of this function will be execuetd as a content script inside the current page
+// The body of this function will be executed as a content script inside the current page
 function getPageProductInfo() {
   const productInfoWrapper = document.querySelector(".product-intro__info");
   const productInfoTitle = productInfoWrapper.querySelector(
@@ -243,8 +230,6 @@ async function saveProduct(productInfo) {
   saveButton.innerText = "Saving...";
   saveButton.disabled = true;
 
-  const headers = new Headers();
-  const { apiKey, sharedSecret } = shopifyConfig;
   const { title, images, sizeList, bodyHtml, colorList } = productInfo;
   const data = {
     product: {
@@ -259,28 +244,17 @@ async function saveProduct(productInfo) {
     },
   };
 
-  headers.append("Authorization", "Basic " + btoa(`${apiKey}:${sharedSecret}`));
-  headers.append("Content-Type", "application/json");
-
-  try {
-    const response = await fetch(
-      `https://chachaxw.myshopify.com/admin/api/2021-10/products.json`,
-      {
-        headers,
-        method: "POST",
-        mode: "no-cors",
-        referer: "no-referrer",
-        credentials: "include",
-        body: JSON.stringify(data),
-      }
-    );
-    console.log("Reponse", response);
-    saveButton.innerText = "Saved";
-  } catch (error) {
-    console.log("Request Error", error);
-    saveButton.disabled = false;
-    saveButton.innerText = "Error, Try Again!";
-  }
+  chrome.runtime.sendMessage(data, function (response) {
+    console.log("====================================");
+    console.log(response);
+    console.log("====================================");
+    if (response?.ok) {
+      saveButton.innerText = "Saved";
+    } else {
+      saveButton.disabled = false;
+      saveButton.innerText = "Try Again!";
+    }
+  });
 }
 
 function generateVariants(productInfo) {

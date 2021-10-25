@@ -13,7 +13,7 @@ addToShopify.addEventListener("click", async () => {
   });
 });
 
-// The body of this function will be execuetd as a content script inside the
+// The body of this function will be executed as a content script inside the
 // current page
 function getPageProductInfo() {
   const productInfoWrapper = document.querySelector(".product-intro__info");
