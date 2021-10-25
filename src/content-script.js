@@ -239,15 +239,19 @@ async function saveProduct(productInfo) {
   saveButton.disabled = true;
 
   const { title, images, sizeList, bodyHtml, colorList } = productInfo;
+
+  let options = [{ name: "Size", values: sizeList }];
+
+  if (colorList.length) {
+    options.push({ name: "Color", values: colorList });
+  }
+
   const data = {
     title,
     images,
+    options,
     body_html: bodyHtml,
     variants: generateVariants(productInfo),
-    options: [
-      { name: "Size", values: sizeList },
-      { name: "Color", values: colorList },
-    ],
   };
 
   try {
@@ -262,6 +266,7 @@ async function saveProduct(productInfo) {
 
     if (response.type === "opaque" || response.ok) {
       saveButton.innerText = "Saved";
+      setTimeout(() => closeContainer(), 3000);
     } else {
       saveButton.innerText = "Try Again!";
       saveButton.disabled = false;
