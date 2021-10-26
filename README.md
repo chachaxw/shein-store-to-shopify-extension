@@ -2,11 +2,11 @@
 
 A Chrome extension with syncing Shein products to Shopify function
 
-## Shopify Login Config
+## Shopify Login Account
 
+Account Info:
 username: chachazw@gmail.com
-apiKey: 22a18f405e229470e8663e113053f40f
-password: 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
+password: ryrsot-derpi5-vavBoj
 
 ## Node Server Start
 
@@ -22,4 +22,4 @@ run: `npm install` and `npm start`
 
 ## How to check if you grabbed the product successfully?
 
-Open browser and access link `https://22a18f405e229470e8663e113053f40f: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@chachaxw.myshopify.com/admin/api/2021-10/products.json`, and check the products length if changed.
+Open browser and access link `https://22a18f405e229470e8663e113053f40f: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@chachaxw.myshopify.com/admin/api/2021-10/products.json`, and check the products data if changed.
