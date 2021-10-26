@@ -10,7 +10,7 @@ password: ryrsot-derpi5-vavBoj
 
 ## Node Server Start
 
-run: `npm install` and `npm start`
+Install the latest Nodejs version at first, and run: `npm install` and `npm start`
 
 ## How to use extension?
 
@@ -18,7 +18,7 @@ run: `npm install` and `npm start`
 2. Make sure Developer mode switched on;
 3. Click the `Load unpacked` button and select the extension folder;
 4. Try to access [example product page](https://us.shein.com/V-neck-Crop-Tee-p-2163330-cat-1738.html?scici=productDetail~~RecommendList~~RS_own,RJ_NoFaultTolerant~~Customers%20Also%20Viewed~~SPcProductDetailCustomersAlsoViewedList~~0)
-5. And Finally, click the `Grab` button on the top right corner on the page and click the `Save to Shopify` button;
+5. And Finally, click the `Grab` button on the top right corner on the page and click the `Save to Shopify` button(Please make sure the server side is running before do that);
 
 ## How to check if you grabbed the product successfully?
 
