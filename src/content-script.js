@@ -15,6 +15,11 @@ function initGrabButton() {
 // The body of this function will be executed as a content script inside the current page
 function getPageProductInfo() {
   const productInfoWrapper = document.querySelector(".product-intro__info");
+
+  if (!productInfoWrapper) {
+    return;
+  }
+
   const productInfoTitle = productInfoWrapper.querySelector(
     ".product-intro__head-name"
   ).innerText;
