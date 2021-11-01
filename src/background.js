@@ -97,7 +97,7 @@ async function fecthImageAsBase64(imgUrl) {
     response.blob()
   );
   const base64 = await blobToBase64(imgBlob);
-  return base64.substring(base64.indexOf(",") + 1);
+  return base64;
 }
 
 function blobToBase64(blob) {
