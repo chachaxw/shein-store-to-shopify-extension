@@ -250,27 +250,9 @@ async function saveProduct(productInfo) {
     variants: generateVariants(productInfo),
   };
 
-  try {
-    const response = await fetch(
-      `http://localhost:3000/shopify/products/create`,
-      {
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (response.type === "opaque" || response.ok) {
-      saveButton.innerText = "Saved";
-      setTimeout(() => closeContainer(), 3000);
-    } else {
-      saveButton.innerText = "Try Again!";
-      saveButton.disabled = false;
-    }
-  } catch (error) {
-    saveButton.innerText = "Try Again!";
-    saveButton.disabled = false;
-  }
+  chrome.runtime.sendMessage(data, (response) => {
+    console.log(response);
+  });
 }
 
 function generateVariants(productInfo) {

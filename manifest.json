@@ -12,7 +12,8 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://chachaxw.myshopify.com/admin/"
+    "https://chachaxw.myshopify.com/admin/",
+    "https://img.ltwebstatic.com/"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -33,7 +34,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://us.shein.com/*"
+        "https://us.shein.com/*",
+        "https://www.shein.com/*"
       ],
       "css": [
         "src/styles.css"

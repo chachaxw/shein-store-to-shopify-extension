@@ -8,10 +8,6 @@ Account Info:
 username: chachazw@gmail.com
 password: ryrsot-derpi5-vavBoj
 
-## Node Server Start
-
-Install the latest Nodejs version at first, and run: `npm install` and `npm start`
-
 ## How to use extension?
 
 1. Open Chrome browser and access `chrome://extensions/`;
