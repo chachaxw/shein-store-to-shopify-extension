@@ -22,14 +22,10 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(async function (params) {
   try {
     const headers = new Headers();
-    const { images, title } = request;
+    const { images } = params;
 
     headers.append(
       "X-Shopify-Access-Token",
@@ -42,32 +38,42 @@ chrome.runtime.onMessage.addListener(async function (
       {
         headers,
         method: "POST",
-        body: JSON.stringify({ product: request }),
+        body: JSON.stringify({ product: params }),
       }
     );
 
     const data = await response.json();
     const { product } = data;
-    await createProductImages(product.id, title, images);
+    await createProductImages(product.id, images);
 
-    sendResponse(response);
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          cmd: "createProductDone",
+        },
+        (res) => console.log(res)
+      );
+    });
   } catch (error) {
-    sendResponse(error);
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          cmd: "createProductError",
+        },
+        (res) => console.log(res)
+      );
+    });
   }
-
-  return true;
 });
 
-async function createProductImages(id, title, imgList) {
-  const base64Images = await convertImagesToBase64(imgList);
-
+async function createProductImages(id, imgList) {
   return await Promise.all(
-    base64Images.map(async (item, index) => {
+    imgList.map(async (item, index) => {
       const data = {
         image: {
-          position: index,
-          attachment: item,
-          filename: `${title}-${index}`,
+          src: item.replace(".webp", ".jpg"),
         },
       };
 
@@ -86,24 +92,24 @@ async function createProductImages(id, title, imgList) {
   );
 }
 
-async function convertImagesToBase64(imgList) {
-  return await Promise.all(
-    imgList.map(async (d) => await fecthImageAsBase64(d))
-  );
-}
+// async function convertImagesToBase64(imgList) {
+//   return await Promise.all(
+//     imgList.map(async (d) => await fecthImageAsBase64(d))
+//   );
+// }
 
-async function fecthImageAsBase64(imgUrl) {
-  const imgBlob = await fetch(imgUrl, { mode: "no-cors" }).then((response) =>
-    response.blob()
-  );
-  const base64 = await blobToBase64(imgBlob);
-  return base64;
-}
+// async function fecthImageAsBase64(imgUrl) {
+//   const imgBlob = await fetch(imgUrl, { mode: "no-cors" }).then((response) =>
+//     response.blob()
+//   );
+//   const base64 = await blobToBase64(imgBlob);
+//   return base64;
+// }
 
-function blobToBase64(blob) {
-  return new Promise((resolve, _) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
-}
+// function blobToBase64(blob) {
+//   return new Promise((resolve, _) => {
+//     const reader = new FileReader();
+//     reader.onloadend = () => resolve(reader.result);
+//     reader.readAsDataURL(blob);
+//   });
+// }

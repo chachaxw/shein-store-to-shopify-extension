@@ -250,10 +250,22 @@ async function saveProduct(productInfo) {
     variants: generateVariants(productInfo),
   };
 
-  chrome.runtime.sendMessage(data, (response) => {
-    console.log(response);
-  });
+  chrome.runtime.sendMessage(data);
 }
+
+chrome.runtime.onMessage.addListener((message, callback) => {
+  const saveButton = document.querySelector(".save-button");
+
+  saveButton.disabled = false;
+
+  // Remove loading state to saveButton;
+  if (message.cmd === "createProductDone") {
+    saveButton.innerText = "Saved";
+    setTimeout(() => closeContainer(), 2500);
+  } else {
+    saveButton.innerText = "Try Again!";
+  }
+});
 
 function generateVariants(productInfo) {
   let variants = [];

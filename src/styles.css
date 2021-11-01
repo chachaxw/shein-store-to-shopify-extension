@@ -62,7 +62,7 @@ button.current {
 }
 
 .product-wrapper {
-  height: calc(100vh-48px);
+  height: calc(100vh - 88px);
   overflow-x: hidden;
   overflow-y: auto;
 }
